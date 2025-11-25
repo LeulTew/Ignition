@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from app.services import generate_breakdown
+from app.services import generate_breakdown, generate_sub_breakdown
 from fastapi.middleware.cors import CORSMiddleware
 import os
 
@@ -18,6 +18,9 @@ app.add_middleware(
 class GoalRequest(BaseModel):
     goal: str
 
+class SubStepRequest(BaseModel):
+    step: str
+
 @app.get("/")
 def read_root():
     return {"status": "System Online", "latency": "12ms"}
@@ -26,6 +29,14 @@ def read_root():
 def breakdown_goal(request: GoalRequest):
     try:
         result = generate_breakdown(request.goal)
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/sub-breakdown")
+def sub_breakdown_step(request: SubStepRequest):
+    try:
+        result = generate_sub_breakdown(request.step)
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
