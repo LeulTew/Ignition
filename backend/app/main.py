@@ -17,9 +17,11 @@ app.add_middleware(
 
 class GoalRequest(BaseModel):
     goal: str
+    language: str = "en"
 
 class SubStepRequest(BaseModel):
     step: str
+    language: str = "en"
 
 @app.get("/")
 def read_root():
@@ -28,7 +30,7 @@ def read_root():
 @app.post("/breakdown")
 def breakdown_goal(request: GoalRequest):
     try:
-        result = generate_breakdown(request.goal)
+        result = generate_breakdown(request.goal, request.language)
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -36,7 +38,7 @@ def breakdown_goal(request: GoalRequest):
 @app.post("/sub-breakdown")
 def sub_breakdown_step(request: SubStepRequest):
     try:
-        result = generate_sub_breakdown(request.step)
+        result = generate_sub_breakdown(request.step, request.language)
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

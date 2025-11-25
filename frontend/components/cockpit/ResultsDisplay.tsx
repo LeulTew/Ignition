@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,12 +8,23 @@ import { ChevronDown, ChevronRight, Terminal } from "lucide-react";
 interface ResultsDisplayProps {
   steps: string[];
   complexity: number;
+  language: "en" | "am";
+  labels: {
+    heading: string;
+    complexity: string;
+    subLoading: string;
+  };
 }
 
-export default function ResultsDisplay({ steps, complexity }: ResultsDisplayProps) {
+export default function ResultsDisplay({ steps, complexity, language, labels }: ResultsDisplayProps) {
   const [expandedStep, setExpandedStep] = useState<number | null>(null);
   const [subSteps, setSubSteps] = useState<Record<number, string[]>>({});
   const [loadingSub, setLoadingSub] = useState<number | null>(null);
+
+  useEffect(() => {
+    setExpandedStep(null);
+    setSubSteps({});
+  }, [language]);
 
   const handleExpand = async (index: number, step: string) => {
     if (expandedStep === index) {
@@ -29,7 +40,7 @@ export default function ResultsDisplay({ steps, complexity }: ResultsDisplayProp
         const response = await fetch("http://localhost:8000/sub-breakdown", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ step }),
+          body: JSON.stringify({ step, language }),
         });
         const data = await response.json();
         setSubSteps(prev => ({ ...prev, [index]: data.substeps }));
@@ -44,9 +55,9 @@ export default function ResultsDisplay({ steps, complexity }: ResultsDisplayProp
   return (
     <div className="w-full max-w-4xl mt-12 space-y-6">
       <div className="flex justify-between items-center border-b border-slate-200 dark:border-slate-800 pb-4 mb-8">
-        <h2 className="text-xl text-cyan-600 dark:text-cyan-400 tracking-widest font-bold">MISSION_PARAMETERS_DECODED</h2>
+        <h2 className="text-xl text-cyan-600 dark:text-cyan-400 tracking-widest font-bold">{labels.heading}</h2>
         <Badge variant="outline" className="border-cyan-500 text-cyan-600 dark:text-cyan-500 bg-cyan-50/50 dark:bg-cyan-950/20">
-          COMPLEXITY_INDEX: {complexity}/10
+          {labels.complexity}: {complexity}/10
         </Badge>
       </div>
 
@@ -88,7 +99,7 @@ export default function ResultsDisplay({ steps, complexity }: ResultsDisplayProp
                       {loadingSub === index ? (
                         <div className="flex items-center gap-2 text-xs text-cyan-500 animate-pulse font-mono py-2">
                           <Terminal size={12} />
-                          <span>GENERATING_TACTICAL_SUBROUTINES...</span>
+                          <span>{labels.subLoading}</span>
                         </div>
                       ) : (
                         subSteps[index]?.map((sub, i) => (
