@@ -1,0 +1,35 @@
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+*.pkl
+
+# Virtual environments
+venv/
+backend/venv/
+.env
+.env.*
+*.env
+
+# Compiled logs / coverage
+*.log
+coverage/
+htmlcov/
+
+# Node/Next artifacts
+node_modules/
+.next/
+out/
+
+# Prisma/SQLite generated files
+frontend/lib/generated/
+
+# Misc IDE
+.vscode/
+.idea/
