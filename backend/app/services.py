@@ -24,16 +24,28 @@ def generate_breakdown(goal: str):
             "complexity": 5
         }
 
-    # Use Gemini 1.5 Pro for better reasoning
-    model = genai.GenerativeModel('gemini-1.5-pro',
+    # Use Gemini 2.0 Flash Experimental (Latest available)
+    model = genai.GenerativeModel('gemini-2.0-flash-exp',
         generation_config={"response_mime_type": "application/json"}
     )
     
+    # Chain of Thought Prompting for better grounding
     prompt = f"""
-    You are an elite tactical planner. Break down this goal into exactly 5 actionable, high-impact steps.
+    You are an elite strategic planner and tactical operations officer.
+    Your mission is to break down a vague user goal into exactly 5 high-impact, actionable, and chronologically ordered steps.
+    
     Goal: "{goal}"
     
-    Return strictly this JSON structure:
+    Instructions:
+    1. Analyze the goal to understand the core objective and implied constraints.
+    2. Determine the complexity level (1-10) based on resource requirements, time, and skill.
+    3. Formulate 5 distinct steps. Each step must be:
+       - Action-oriented (start with a strong verb).
+       - Specific and measurable.
+       - Logical in sequence (Step 1 leads to Step 2, etc.).
+       - "Dark Technical" in tone (concise, professional, no fluff).
+    
+    Output strictly valid JSON in this format:
     {{
         "steps": ["step1", "step2", "step3", "step4", "step5"],
         "complexity": <integer between 1-10>
