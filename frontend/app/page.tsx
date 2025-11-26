@@ -26,6 +26,7 @@ type ServerGoal = {
   complexity?: number;
 };
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
 const MAX_HISTORY = 15;
 
 const LANGUAGE_COPY = {
@@ -290,7 +291,7 @@ export default function Home() {
     const measureLatency = async () => {
       const started = performance.now();
       try {
-        await fetch("http://localhost:8000/");
+        await fetch(`${API_BASE_URL}/`);
         if (!isCancelled) {
           setLatencyMs(Math.round(performance.now() - started));
         }
@@ -314,7 +315,7 @@ export default function Home() {
     setIsLoading(true);
     setResult(null);
     try {
-      const response = await fetch("http://localhost:8000/breakdown", {
+      const response = await fetch(`${API_BASE_URL}/breakdown`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ goal, language }),
