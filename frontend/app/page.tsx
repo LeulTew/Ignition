@@ -384,7 +384,7 @@ export default function Home() {
         )}
       </div>
 
-      <div className="hidden md:block w-full mt-8 pt-6 border-t border-slate-200 dark:border-slate-900">
+      <div className="hidden md:block w-full mt-0 pt-6 border-t border-slate-200 dark:border-slate-900">
         <div className="flex items-center justify-between mb-3">
           <p className="text-xs text-slate-400 dark:text-slate-500 font-mono tracking-wider">
             {copy.history.label}

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
 interface InputScannerProps {
@@ -15,6 +15,7 @@ export default function InputScanner({ onSubmit, isLoading, placeholder, ctaLabe
   const [goal, setGoal] = useState("");
   const [progress, setProgress] = useState(0);
   const trimmedGoal = goal.trim();
+  const textAreaRef = useRef<HTMLTextAreaElement | null>(null);
 
   const handleSubmit = () => {
     if (!trimmedGoal || isLoading) {
@@ -23,6 +24,20 @@ export default function InputScanner({ onSubmit, isLoading, placeholder, ctaLabe
     onSubmit(trimmedGoal);
     setGoal("");
   };
+
+  useEffect(() => {
+    if (!textAreaRef.current) {
+      return;
+    }
+    const el = textAreaRef.current;
+    el.style.height = "auto";
+    const maxHeight = 220;
+    const nextHeight = Math.min(el.scrollHeight, maxHeight);
+    el.style.height = `${nextHeight}px`;
+    el.style.overflowY = el.scrollHeight > maxHeight ? "auto" : "hidden";
+  }, [goal]);
+
+  const inputSizeClass = goal.length > 140 ? "text-base" : goal.length > 70 ? "text-lg" : "text-xl";
 
   useEffect(() => {
     let intervalId: number | null = null;
@@ -62,13 +77,15 @@ export default function InputScanner({ onSubmit, isLoading, placeholder, ctaLabe
       <div className="absolute -bottom-2 -right-2 w-4 h-4 border-b-2 border-r-2 border-cyan-500" />
 
       <div className="relative bg-slate-900/50 border border-slate-800 p-1 backdrop-blur-sm">
-        <input
-          type="text"
+        <textarea
+          ref={textAreaRef}
           value={goal}
           onChange={(e) => setGoal(e.target.value)}
           disabled={isLoading}
           placeholder={placeholder}
-          className={`w-full bg-transparent border-none text-xl p-6 text-center text-cyan-100 placeholder:text-slate-700 focus:ring-0 focus:outline-none ${language === "am" ? "tracking-wide" : "uppercase tracking-widest"}`}
+          rows={2}
+          className={`w-full bg-transparent border-none ${inputSizeClass} p-6 text-center text-cyan-100 placeholder:text-slate-700 focus:ring-0 focus:outline-none resize-none leading-relaxed ${language === "am" ? "tracking-wide" : "uppercase tracking-[0.4em]"}`}
+          style={{ maxHeight: 220 }}
         />
         
         {/* Scanning Line Animation */}
