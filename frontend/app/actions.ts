@@ -57,7 +57,7 @@ async function pruneGoals() {
       select: { id: true },
     });
     if (overflow.length) {
-      await prisma.goal.deleteMany({ where: { id: { in: overflow.map((goal) => goal.id) } } });
+      await prisma.goal.deleteMany({ where: { id: { in: overflow.map((goal: { id: string }) => goal.id) } } });
     }
   } catch (error) {
     console.error("Failed to prune goals:", error);
