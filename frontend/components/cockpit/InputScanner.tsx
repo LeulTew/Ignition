@@ -90,10 +90,10 @@ export default function InputScanner({ onSubmit, isLoading, placeholder, ctaLabe
           <>
             <motion.span
               aria-hidden
-              className="absolute inset-y-0 left-0 rounded-sm shadow-[0_0_25px_#0ea5e9]"
+              className="absolute inset-y-0 left-0 rounded-sm shadow-[0_0_22px_rgba(6,182,212,0.45)]"
               style={{
                 backgroundImage:
-                  "linear-gradient(120deg, rgba(14,165,233,0.15), rgba(6,182,212,0.35), rgba(147,197,253,0.45))",
+                  "linear-gradient(90deg, rgba(8,47,73,0.45), rgba(6,182,212,0.5), rgba(14,165,233,0.75))",
               }}
               initial={{ width: 0, opacity: 0 }}
               animate={{ width: `${progress}%`, opacity: 1 }}
@@ -101,7 +101,7 @@ export default function InputScanner({ onSubmit, isLoading, placeholder, ctaLabe
             />
             <motion.span
               aria-hidden
-              className="absolute inset-y-[2px] left-[2px] right-[2px] rounded-sm bg-[radial-gradient(circle_at_top,rgba(240,249,255,0.7),transparent)] opacity-40"
+              className="absolute inset-y-[2px] left-[2px] right-[2px] rounded-sm bg-gradient-to-r from-white/50 via-cyan-100/30 to-transparent opacity-60"
               initial={{ width: 0, opacity: 0 }}
               animate={{ width: `${Math.max(progress - 2, 0)}%`, opacity: 0.4 }}
               transition={{ duration: 0.35, ease: "easeInOut" }}

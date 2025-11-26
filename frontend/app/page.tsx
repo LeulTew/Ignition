@@ -319,6 +319,7 @@ export default function Home() {
   };
 
   const historyToggleLabel = `${copy.history.toggle} ${isMobileHistoryOpen ? "▲" : "▼"}`;
+  const desktopHistoryHeight = "min(34rem, calc(100vh - 240px))";
 
   return (
     <div className="flex flex-col items-center w-full max-w-6xl px-4 py-6 md:py-12 min-h-screen pb-32 md:pb-0">
@@ -383,14 +384,17 @@ export default function Home() {
         )}
       </div>
 
-      <div className="hidden md:block w-full mt-12 pt-8 border-t border-slate-200 dark:border-slate-900">
+      <div className="hidden md:block w-full mt-8 pt-6 border-t border-slate-200 dark:border-slate-900">
         <div className="flex items-center justify-between mb-3">
           <p className="text-xs text-slate-400 dark:text-slate-500 font-mono tracking-wider">
             {copy.history.label}
           </p>
           <span className="text-[10px] text-slate-400 font-mono">{copy.history.hint}</span>
         </div>
-        <div className="rounded-md border border-slate-200 dark:border-slate-800 bg-slate-100/50 dark:bg-slate-950/50 p-6 h-[26rem] max-h-[calc(100vh-260px)]">
+        <div
+          className="rounded-md border border-slate-200 dark:border-slate-800 bg-slate-100/50 dark:bg-slate-950/50 p-6"
+          style={{ height: desktopHistoryHeight }}
+        >
           <HistoryList
             items={history}
             copy={copy.history}
@@ -411,12 +415,14 @@ export default function Home() {
         <div
           className={`px-4 pb-4 transition-[max-height] duration-300 overflow-hidden ${isMobileHistoryOpen ? "max-h-[70vh]" : "max-h-0"}`}
         >
-          <HistoryList
-            items={history}
-            copy={copy.history}
-            onDelete={handleDeleteHistory}
-            scrollClassName="max-h-[60vh]"
-          />
+          <div className="h-[60vh]">
+            <HistoryList
+              items={history}
+              copy={copy.history}
+              onDelete={handleDeleteHistory}
+              scrollClassName="h-full"
+            />
+          </div>
         </div>
       </div>
     </div>
