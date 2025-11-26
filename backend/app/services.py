@@ -179,57 +179,57 @@ def _offline_plan(goal: str, language: Language) -> Dict[str, Any]:
     if "launch" in goal_lower or "deploy" in goal_lower:
         steps = {
             "en": [
-                "Audit launch prerequisites, key dependencies, and regulatory blockers.",
-                "Build and validate an execution playbook with timeline gates.",
-                "Stage infrastructure and rehearsal environments for dry runs.",
-                "Run limited-scope launch rehearsal capturing telemetry and gaps.",
-                "Green-light full launch with war-room monitoring and postmortem plan."
+                "Gemini is offline; no launch plan generated.",
+                "Validate API key, quota, or model status before retrying.",
+                "Hold deployment actions until a successful live response exists.",
+                "Monitor backend logs or provider status pages for recovery.",
+                "Re-run this request once connectivity is confirmed restored."
             ],
             "am": [
-                "የመጀመሪያ አስፈላጊዎችን፣ ቁልፍ ጥገኞችን እና የህጋዊ ግዴታዎችን ይፈትሹ።",
-                "ጊዜ ማዕቀፍ ያላቸው ደረጃዎችን የሚያካትት የእንቅስቃሴ መመዝገብ ይዘጋጁ።",
-                "ተግባራዊ መድረኮችን እና ሙከራ አካባቢዎችን ይዘጋጁ።",
-                "ገደብ ያለው የሙከራ እንቅስቃሴ አስኬዱ እና ቴሌሜትሪ ይያዙ።",
-                "በዋር-ሩም መቆጣጠሪያ ጋር ሙሉ ማስጀመሪያን ይፈቅዱ እና ድጋሜ እቅድ ያቅርቡ።"
+                "ጄሚኒ መልስ አልሰጠም፤ የመጀመሪያ እቅድ አልተፈጠረም።",
+                "API ቁልፍ፣ ኮታ ወይም የሞዴል ሁኔታን ያረጋግጡ ከድጋሚ ሞክሮ በፊት።",
+                "የመጀመሪያ ጉዞ ተግባሮችን እስኪመለስ ድረስ ይቆዩ።",
+                "የጀርባ መዝገቦችን ወይም የአቅራቢ ሁኔታ ገጽን ይከታተሉ።",
+                "ግንኙነቱ ከተመለሰ በኋላ ጥያቄውን ድጋሚ ይመለሱ።"
             ]
         }
     elif "research" in goal_lower or "analyze" in goal_lower:
         steps = {
             "en": [
-                "Define research hypotheses, success metrics, and scope boundaries.",
-                "Collect and normalize critical datasets or expert interviews.",
-                "Synthesize findings into structured frameworks and models.",
-                "Pressure-test insights with stakeholders for blind spots.",
-                "Publish decision-ready brief with recommended actions."
+                "Gemini unavailable; analysis output not produced.",
+                "Confirm credentials, quotas, or service health dashboards.",
+                "Do not rely on cached results; await a verified model reply.",
+                "Log the outage with timestamp for auditing purposes.",
+                "Retry your research request once the service stabilizes."
             ],
             "am": [
-                "የምርምር ግምቶችን፣ የስኬት መለኪያዎችን እና የስፋት መስመሮችን ይግለጹ።",
-                "አስፈላጊ ውሂብን ወይም ባለሙያ ቃለ መጠይቆችን ይሰብስቡ እና ያስመዝግቡ።",
-                "ግኝቶችን ወደ ተዋቋማ መዋቅሮችና ሞዴሎች ይቀይሩ።",
-                "ከተፈላጊ ተሳታፊዎች ጋር ጉድለቶችን ይፈትኑ።",
-                "የውሳኔ ዝግጅት የሆነ ሪፖርት ከምክሮች ጋር ይዘጋጁ።"
+                "ጄሚኒ አልገናኘም፤ የአንተ ትንታኔ አልተሰጠም።",
+                "እገዳዎችን፣ ኮታዎችን ወይም የአገልግሎት ጤናን ያረጋግጡ።",
+                "የቀድሞ ውጤቶችን አትተማመኑ፤ ታድሶ መልስ ይጠብቁ።",
+                "የጉዳዩን ጊዜ ማስታወሻ ይመዝግቡ ለኦዲት።",
+                "አገልግሎቱ ከተዋሃደ በኋላ ድጋሚ ይሞክሩ።"
             ]
         }
     else:
         steps = {
             "en": [
-                "Define scope, success metrics, and constraints for the goal.",
-                "Map critical resources, tools, and personnel needed.",
-                "Develop a sequenced execution playbook with owners.",
-                "Instrument telemetry to monitor progress in real-time.",
-                "Run post-action review and iterate on next objectives."
+                "Gemini response missing; unable to compute this goal.",
+                "Verify API key, billing, or model availability.",
+                "Capture this outage in ops logs for visibility.",
+                "Pause related workflows until a real plan is returned.",
+                "Retry later; no fallback plan is generated."
             ],
             "am": [
-                "የግብ ድርሻ፣ የስኬት መለኪያዎችን እና ገደቦችን ይግለጹ።",
-                "አስፈላጊ ሀብቶችን፣ መሣሪያዎችን እና ተጠሪዎችን ይካዩ።",
-                "ተከታታይ የእንቅስቃሴ መመዝገብ ከባለሥልጣኖች ጋር ይዘጋጁ።",
-                "ሂደቱን በቀጥታ ለመመርመር ቴሌሜትሪ ይጫኑ።",
-                "ከተፈፀመ በኋላ ግምገማ አድርጉ እና ቀጣይ ግቦችን ይዘጋጁ።"
+                "ጄሚኒ መልስ አልተቀበለም፤ ዕቅድ አልተፈጠረም።",
+                "API ቁልፍ፣ ክፍያ ወይም የሞዴል አገልግሎትን ያረጋግጡ።",
+                "ይህን ችግኝ በኦፕስ መዝገብ ውስጥ ይመዝግቡ።",
+                "ትክክለኛ መልስ እስኪመጣ ድረስ ተዛማጅ ስራዎችን ያቁሙ።",
+                "በኋላ ድጋሚ ይዘምኑ፤ እቅድ አልተፈጠረም።"
             ]
         }
     return {
         "steps": steps[language],
-        "complexity": 5
+        "complexity": 0
     }
 
 
