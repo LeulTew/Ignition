@@ -7,7 +7,7 @@ import time
 from functools import lru_cache
 from typing import Any, Dict, List, Optional, Callable
 
-from google import genai
+import google.genai as genai
 from google.genai import types
 from dotenv import load_dotenv
 from app.guardrails import Language, classify_goal, gibberish_plan, abuse_plan
