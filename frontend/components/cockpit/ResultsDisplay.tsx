@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { ChevronDown, ChevronRight, Terminal } from "lucide-react";
 import { soundManager } from "@/lib/sounds";
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000";
+
 interface ResultsDisplayProps {
   steps: string[];
   complexity: number;
@@ -38,7 +40,7 @@ export default function ResultsDisplay({ steps, complexity, language, labels }: 
     if (!subSteps[index]) {
       setLoadingSub(index);
       try {
-        const response = await fetch("http://localhost:8000/sub-breakdown", {
+        const response = await fetch(`${API_BASE_URL}/sub-breakdown`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ step, language }),
