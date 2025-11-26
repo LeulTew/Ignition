@@ -5,11 +5,12 @@ import os
 import random
 import time
 from functools import lru_cache
-from typing import Any, Dict, List, Optional, Literal, Callable
+from typing import Any, Dict, List, Optional, Callable
 
 from google import genai
 from google.genai import types
 from dotenv import load_dotenv
+from app.guardrails import Language, classify_goal, gibberish_plan, abuse_plan
 
 load_dotenv()
 
@@ -30,8 +31,6 @@ DEFAULT_MODEL_CHAIN = [
     "gemini-2.5-flash-lite",
     "gemini-2.0-flash"
 ]
-
-Language = Literal["en", "am"]
 
 def _get_model_chain() -> List[str]:
     raw = os.getenv("GEMINI_MODEL_CHAIN")
@@ -261,6 +260,14 @@ def _generate_breakdown_cached(goal: str, language: Language) -> Dict[str, Any]:
 
 def generate_breakdown(goal: str, language: str = "en") -> Dict[str, Any]:
     normalized_language = _normalize_language(language)
+    guardrail = classify_goal(goal, client, _extract_response_text)
+    status = guardrail.get("status", "ok")
+    if status == "gibberish":
+        logger.info("Goal classified as gibberish: %s", guardrail.get("reason"))
+        return gibberish_plan(normalized_language, guardrail.get("reason"))
+    if status == "abuse":
+        logger.info("Goal classified as abusive: %s", guardrail.get("reason"))
+        return abuse_plan(normalized_language, guardrail.get("reason"))
     return copy.deepcopy(_generate_breakdown_cached(goal, normalized_language))
 
 

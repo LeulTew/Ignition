@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ChevronDown, ChevronRight, Terminal } from "lucide-react";
+import { soundManager } from "@/lib/sounds";
 
 interface ResultsDisplayProps {
   steps: string[];
@@ -44,6 +45,7 @@ export default function ResultsDisplay({ steps, complexity, language, labels }: 
         });
         const data = await response.json();
         setSubSteps(prev => ({ ...prev, [index]: data.substeps }));
+        soundManager.playSubroutineSound();
       } catch (error) {
         console.error("Failed to fetch sub-breakdown", error);
       } finally {

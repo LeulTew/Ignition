@@ -6,6 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { LanguageToggle } from "@/components/ui/language-toggle";
 import { saveGoal, getRecentGoals, deleteGoal } from "./actions";
+import { soundManager } from "@/lib/sounds";
 
 type Language = "en" | "am";
 
@@ -229,6 +230,7 @@ export default function Home() {
   const [language, setLanguage] = useState<Language>("en");
   const [isMobileHistoryOpen, setIsMobileHistoryOpen] = useState(false);
   const [latencyMs, setLatencyMs] = useState<number | null>(null);
+  const [soundEnabled, setSoundEnabled] = useState(true);
 
   const copy = useMemo(() => LANGUAGE_COPY[language], [language]);
 
@@ -263,6 +265,24 @@ export default function Home() {
       window.localStorage.setItem("goalbreaker-lang", language);
     }
   }, [language]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    const stored = window.localStorage.getItem("goalbreaker-sound");
+    if (stored === "muted") {
+      setSoundEnabled(false);
+      soundManager.setEnabled(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    soundManager.setEnabled(soundEnabled);
+    if (typeof window !== "undefined") {
+      window.localStorage.setItem("goalbreaker-sound", soundEnabled ? "on" : "muted");
+    }
+  }, [soundEnabled]);
 
   useEffect(() => {
     let isCancelled = false;
@@ -301,6 +321,7 @@ export default function Home() {
       });
       const data = await response.json();
       setResult(data);
+      soundManager.playSuccessSound();
 
       await saveGoal(goal, data.steps, data.complexity);
       await loadHistory();
@@ -321,8 +342,65 @@ export default function Home() {
   const historyToggleLabel = `${copy.history.toggle} ${isMobileHistoryOpen ? "▲" : "▼"}`;
   const desktopHistoryHeight = "min(34rem, calc(100vh - 240px))";
 
+  const SoundToggleControl = ({ className = "", variant = "standard" }: { className?: string; variant?: "standard" | "compact" }) => {
+    const padding = variant === "compact" ? "px-2.5 py-1.5" : "px-4 py-2";
+    const gap = variant === "compact" ? "gap-1.5" : "gap-3";
+    const iconSize = variant === "compact" ? 24 : 32;
+    const labelClass = variant === "compact" ? "text-[8px] tracking-[0.25em]" : "text-[10px] tracking-[0.3em]";
+    const statusClass = variant === "compact" ? "text-[10px]" : "text-xs";
+    const barHeights = variant === "compact" ? [6, 9, 12] : [8, 11, 14];
+
+    return (
+      <button
+        type="button"
+        onClick={() => setSoundEnabled((prev) => !prev)}
+        className={`group flex items-center ${gap} rounded-full border border-cyan-900/40 bg-slate-900/40 ${padding} text-left transition-colors hover:border-cyan-500/70 ${soundEnabled ? "text-cyan-400" : "text-slate-400"} ${className}`}
+        aria-pressed={!soundEnabled}
+        aria-label={soundEnabled ? "Mute cockpit sound" : "Enable cockpit sound"}
+      >
+        <svg
+          width={iconSize}
+          height={iconSize}
+          viewBox="0 0 32 32"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+          className="text-cyan-400"
+        >
+          <circle cx="16" cy="16" r="13" stroke="currentColor" strokeWidth="1.25" opacity="0.4" />
+          <circle cx="16" cy="16" r="8" stroke="currentColor" strokeWidth="1.25" opacity="0.55" />
+          <path
+            d="M16 7L18.3 12.5L24 13L19.5 16.8L20.9 23L16 19.9L11.1 23L12.5 16.8L8 13L13.7 12.5L16 7Z"
+            stroke="currentColor"
+            strokeWidth="1.25"
+            fill="none"
+          />
+          {!soundEnabled && (
+            <line x1="8" y1="24" x2="24" y2="8" stroke="currentColor" strokeWidth="1.25" />
+          )}
+        </svg>
+        <div>
+          <p className={`font-mono uppercase ${labelClass} text-slate-500 group-hover:text-slate-300`}>
+            Global Context
+          </p>
+          <p className={`${statusClass} font-mono tracking-widest ${soundEnabled ? "text-cyan-400" : "text-slate-500"}`}>
+            {soundEnabled ? "SOUND ONLINE" : "SOUND MUTED"}
+          </p>
+        </div>
+        <div className="flex items-end gap-[3px]" aria-hidden="true">
+          {barHeights.map((height, barIndex) => (
+            <span
+              key={`sound-bar-${height}`}
+              className={`w-[3px] rounded-full ${soundEnabled ? "bg-cyan-400 animate-pulse" : "bg-slate-600"}`}
+              style={{ height: `${height}px`, animationDelay: `${barIndex * 120}ms` }}
+            />
+          ))}
+        </div>
+      </button>
+    );
+  };
+
   return (
-    <div className="flex flex-col items-center w-full max-w-6xl px-4 py-6 md:py-12 min-h-screen pb-32 md:pb-0">
+    <div className="flex flex-col items-center w-full max-w-6xl px-4 py-6 md:py-12 min-h-screen md:pb-0">
       <DesktopStatus copy={copy.status} latencyMs={latencyMs} />
 
       <div className="hidden md:flex fixed top-6 right-6 z-40 items-center gap-3">
@@ -402,12 +480,18 @@ export default function Home() {
             scrollClassName="h-full"
           />
         </div>
+        <div className="mt-4 flex justify-end">
+          <SoundToggleControl className="min-w-[16rem] justify-between" />
+        </div>
       </div>
 
-      <div className="md:hidden fixed bottom-0 left-0 right-0 border-t border-slate-900 bg-slate-100/90 dark:bg-slate-950/90 backdrop-blur">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 border-t border-slate-900 bg-slate-100/90 dark:bg-slate-950/90 backdrop-blur z-20">
+        <div className="px-4 pt-3 pb-2 border-b border-slate-900/40">
+          <SoundToggleControl className="w-full justify-between" variant="compact" />
+        </div>
         <button
           type="button"
-          className="w-full py-3 text-xs font-mono tracking-widest text-slate-600 dark:text-slate-300 flex items-center justify-center gap-2"
+          className="w-full py-2.5 text-[11px] font-mono tracking-widest text-slate-600 dark:text-slate-300 flex items-center justify-center gap-2"
           onClick={() => setIsMobileHistoryOpen((prev) => !prev)}
         >
           {historyToggleLabel}

@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import { soundManager } from "@/lib/sounds";
 
 interface InputScannerProps {
   onSubmit: (goal: string) => void;
@@ -50,6 +51,7 @@ export default function InputScanner({ onSubmit, isLoading, placeholder, ctaLabe
     let completeFrameId: number | null = null;
 
     if (isLoading) {
+      soundManager.startProgressTone();
       frameId = window.requestAnimationFrame(() => setProgress(0));
       intervalId = window.setInterval(() => {
         setProgress((prev) => {
@@ -60,6 +62,7 @@ export default function InputScanner({ onSubmit, isLoading, placeholder, ctaLabe
         });
       }, 90);
     } else {
+      soundManager.stopProgressTone();
       completeFrameId = window.requestAnimationFrame(() => {
         setProgress((prev) => (prev > 0 && prev < 100 ? 100 : prev));
       });
@@ -79,6 +82,7 @@ export default function InputScanner({ onSubmit, isLoading, placeholder, ctaLabe
       if (completeFrameId) {
         window.cancelAnimationFrame(completeFrameId);
       }
+      soundManager.stopProgressTone();
     };
   }, [isLoading]);
 
@@ -94,7 +98,10 @@ export default function InputScanner({ onSubmit, isLoading, placeholder, ctaLabe
         <textarea
           ref={textAreaRef}
           value={goal}
-          onChange={(e) => setGoal(e.target.value)}
+          onChange={(e) => {
+            setGoal(e.target.value);
+            soundManager.playTypingSound();
+          }}
           disabled={isLoading}
           placeholder={placeholder}
           rows={2}

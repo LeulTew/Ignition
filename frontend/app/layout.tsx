@@ -42,7 +42,7 @@ export default function RootLayout({
           </main>
 
           {/* Footer */}
-          <footer className="w-full mt-12 mb-20 md:mb-0 py-8 text-center text-[10px] md:text-xs text-slate-400 dark:text-slate-600 space-y-2 bg-slate-100/50 dark:bg-slate-950/50 backdrop-blur-sm border-t border-slate-200 dark:border-slate-900">
+          <footer className="w-full mt-0 md:mt-12 mb-25 md:mb-0 py-8 text-center text-[10px] md:text-xs text-slate-400 dark:text-slate-600 space-y-2 bg-slate-100/50 dark:bg-slate-950/50 backdrop-blur-sm border-t border-slate-200 dark:border-slate-900">
             <p className="font-bold tracking-widest">IGNITION // GOAL_BREAKER.EXE</p>
             <p>Leul Tewodros Agonafer | leulman2@gmail.com | +251966235333</p>
             <div className="flex justify-center gap-4 text-slate-500">
@@ -51,9 +51,9 @@ export default function RootLayout({
                 target="_blank"
                 rel="noreferrer"
                 aria-label="Telegram"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white/60 text-slate-600 hover:border-cyan-400 hover:text-cyan-500 transition-colors dark:border-slate-800 dark:bg-slate-900/70 dark:text-slate-300"
+                className="inline-flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-full border border-slate-200 bg-white/60 text-slate-600 hover:border-cyan-400 hover:text-cyan-500 transition-colors dark:border-slate-800 dark:bg-slate-900/70 dark:text-slate-300"
               >
-                <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current" aria-hidden>
+                <svg viewBox="0 0 24 24" className="h-4 w-4 md:h-5 md:w-5 fill-current" aria-hidden>
                   <path d={SOCIAL_ICONS.telegram} />
                 </svg>
               </a>
@@ -62,9 +62,9 @@ export default function RootLayout({
                 target="_blank"
                 rel="noreferrer"
                 aria-label="LinkedIn"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white/60 text-slate-600 hover:border-cyan-400 hover:text-cyan-500 transition-colors dark:border-slate-800 dark:bg-slate-900/70 dark:text-slate-300"
+                className="inline-flex h-9 w-9 md:h-10 md:w-10 items-center justify-center rounded-full border border-slate-200 bg-white/60 text-slate-600 hover:border-cyan-400 hover:text-cyan-500 transition-colors dark:border-slate-800 dark:bg-slate-900/70 dark:text-slate-300"
               >
-                <svg viewBox="0 0 24 24" className="h-5 w-5 fill-current" aria-hidden>
+                <svg viewBox="0 0 24 24" className="h-4 w-4 md:h-5 md:w-5 fill-current" aria-hidden>
                   <path d={SOCIAL_ICONS.linkedin} />
                 </svg>
               </a>
