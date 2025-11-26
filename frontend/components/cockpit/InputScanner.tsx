@@ -37,14 +37,20 @@ export default function InputScanner({ onSubmit, isLoading, placeholder, ctaLabe
     el.style.overflowY = el.scrollHeight > maxHeight ? "auto" : "hidden";
   }, [goal]);
 
-  const inputSizeClass = goal.length > 140 ? "text-base" : goal.length > 70 ? "text-lg" : "text-xl";
+  const inputSizeClass = goal.length > 140
+    ? "text-sm md:text-lg"
+    : goal.length > 70
+      ? "text-base md:text-xl"
+      : "text-lg md:text-2xl";
 
   useEffect(() => {
     let intervalId: number | null = null;
     let timeoutId: number | null = null;
+    let frameId: number | null = null;
+    let completeFrameId: number | null = null;
 
     if (isLoading) {
-      setProgress(0);
+      frameId = window.requestAnimationFrame(() => setProgress(0));
       intervalId = window.setInterval(() => {
         setProgress((prev) => {
           if (prev >= 92) {
@@ -54,7 +60,9 @@ export default function InputScanner({ onSubmit, isLoading, placeholder, ctaLabe
         });
       }, 90);
     } else {
-      setProgress((prev) => (prev > 0 && prev < 100 ? 100 : prev));
+      completeFrameId = window.requestAnimationFrame(() => {
+        setProgress((prev) => (prev > 0 && prev < 100 ? 100 : prev));
+      });
       timeoutId = window.setTimeout(() => setProgress(0), 400);
     }
 
@@ -64,6 +72,12 @@ export default function InputScanner({ onSubmit, isLoading, placeholder, ctaLabe
       }
       if (timeoutId) {
         window.clearTimeout(timeoutId);
+      }
+      if (frameId) {
+        window.cancelAnimationFrame(frameId);
+      }
+      if (completeFrameId) {
+        window.cancelAnimationFrame(completeFrameId);
       }
     };
   }, [isLoading]);
@@ -84,7 +98,7 @@ export default function InputScanner({ onSubmit, isLoading, placeholder, ctaLabe
           disabled={isLoading}
           placeholder={placeholder}
           rows={2}
-          className={`w-full bg-transparent border-none ${inputSizeClass} p-6 text-center text-cyan-100 placeholder:text-slate-700 focus:ring-0 focus:outline-none resize-none leading-relaxed ${language === "am" ? "tracking-wide" : "uppercase tracking-[0.4em]"}`}
+          className={`w-full bg-transparent border-none ${inputSizeClass} px-4 py-4 md:p-6 text-center text-cyan-100 placeholder:text-slate-700 focus:ring-0 focus:outline-none resize-none leading-relaxed ${language === "am" ? "tracking-wide" : "uppercase tracking-[0.32em] md:tracking-[0.4em]"}`}
           style={{ maxHeight: 220 }}
         />
         
