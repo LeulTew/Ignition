@@ -17,10 +17,31 @@ GOAL_BREAKER.EXE takes that signal, filters out the noise, and returns a **Tacti
 
 ## 📸 Visual Reconnaissance
 
-| **Desktop Command Center** | **Mobile Field Unit** |
+### 🖥️ Desktop Command Center
+> *Primary operating environment. Optimized for high-density information display.*
+
+![Main Interface](./docs/desktop_result.png)
+*Figure 1: The active breakdown state showing a generated 5-step plan with complexity scoring.*
+
+<br/>
+
+| **Tactical Drill-Down** | **Historical Logs** |
 |:---:|:---:|
-| ![Desktop Cockpit](./docs/desktop.png) | ![Mobile Cockpit](./docs/mobile.png) |
-| *Full telemetry, history grid, and inline expansion.* | *Compact typography, slide-up drawers, and thumb-friendly controls.* |
+| ![Subtasks](./docs/desktop_result_with_subtasks.png) | ![History](./docs/desktop_history.png) |
+| *Recursive sub-step generation.* | *Persistent operation logs.* |
+
+| **Light Mode Variant** | **Initial State** |
+|:---:|:---:|
+| ![Light Mode](./docs/desktop_light_mode.png) | ![Empty State](./docs/desktop.png) |
+| *High-contrast daylight ops.* | *Ready-state dot grid.* |
+
+### 📱 Mobile Field Unit
+> *Responsive interface for operators in the field.*
+
+| **Cockpit View** | **History Drawer** |
+|:---:|:---:|
+| ![Mobile](./docs/mobile.png) | ![Mobile History](./docs/mobile_history.png) |
+| *Thumb-optimized controls.* | *Slide-up access to past missions.* |
 
 ---
 
