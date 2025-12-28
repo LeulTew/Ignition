@@ -27,9 +27,9 @@ BASE_RETRY_DELAY = float(os.getenv("GEMINI_RETRY_BASE_DELAY", "1.0"))
 
 # Allow ops to override model priority without code changes
 DEFAULT_MODEL_CHAIN = [
+    "gemini-3-flash-preview",
     "gemini-2.5-flash",
-    "gemini-2.5-flash-lite",
-    "gemini-2.0-flash"
+    "gemini-2.5-flash-lite"
 ]
 
 def _get_model_chain() -> List[str]:

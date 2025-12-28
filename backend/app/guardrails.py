@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 Language = Literal["en", "am"]
 GuardrailStatus = Literal["ok", "gibberish", "abuse"]
 
-GUARDRAIL_MODEL = os.getenv("GEMINI_GUARDRAIL_MODEL", "gemini-2.0-flash-lite")
+GUARDRAIL_MODEL = os.getenv("GEMINI_GUARDRAIL_MODEL", "gemini-3-flash-preview")
 
 
 def _build_guardrail_prompt(goal: str) -> str:
