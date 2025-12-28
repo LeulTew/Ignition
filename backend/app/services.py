@@ -167,7 +167,7 @@ def _safe_parse_response(payload: str, goal: str, language: Language) -> Dict[st
         return {"steps": steps, "complexity": complexity}
     except Exception as exc:
         logger.error("Failed to parse Gemini response: %s", exc)
-        return _offline_plan(goal, language)
+        raise  # Raise so the model chain can attempt the next fallback
 
 
 def _safe_parse_sub_response(payload: str, language: Language) -> Dict[str, Any]:
@@ -179,7 +179,7 @@ def _safe_parse_sub_response(payload: str, language: Language) -> Dict[str, Any]
         return {"substeps": [str(s) for s in substeps[:3]]}
     except Exception as exc:
         logger.error("Failed to parse Gemini sub-response: %s", exc)
-        return _offline_substeps(language)
+        raise
 
 
 def _is_rate_limit_error(exc: Exception) -> bool:
