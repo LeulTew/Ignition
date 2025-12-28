@@ -167,6 +167,7 @@ def _safe_parse_response(payload: str, goal: str, language: Language) -> Dict[st
         return {"steps": steps, "complexity": complexity}
     except Exception as exc:
         logger.error("Failed to parse Gemini response: %s", exc)
+        logger.error("Raw payload attempted: %s", payload[:500])
         raise  # Raise so the model chain can attempt the next fallback
 
 
