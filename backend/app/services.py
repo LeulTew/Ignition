@@ -21,7 +21,7 @@ api_key = os.getenv("GEMINI_API_KEY")
 client = genai.Client(api_key=api_key) if api_key else None
 
 TEMPERATURE = float(os.getenv("GEMINI_TEMPERATURE", "0.1"))
-MAX_OUTPUT_TOKENS = int(os.getenv("GEMINI_MAX_OUTPUT_TOKENS", "512"))
+MAX_OUTPUT_TOKENS = int(os.getenv("GEMINI_MAX_OUTPUT_TOKENS", "1024"))
 MAX_RETRIES = int(os.getenv("GEMINI_MAX_RETRIES", "3"))
 BASE_RETRY_DELAY = float(os.getenv("GEMINI_RETRY_BASE_DELAY", "1.0"))
 
@@ -117,24 +117,38 @@ def _extract_response_text(response: Any) -> str:
     if response is None:
         raise ValueError("Gemini returned empty response")
 
+    # The SDK usually puts text in .text or inside candidates
+    raw_text = ""
     text = getattr(response, "text", None)
     if isinstance(text, str) and text.strip():
-        return text
+        raw_text = text
+    else:
+        candidates = getattr(response, "candidates", None) or []
+        parts: List[str] = []
+        for candidate in candidates:
+            content = getattr(candidate, "content", None)
+            if not content:
+                continue
+            for part in getattr(content, "parts", []) or []:
+                part_text = getattr(part, "text", None)
+                if isinstance(part_text, str) and part_text.strip():
+                    parts.append(part_text)
+        if parts:
+            raw_text = "\n".join(parts)
 
-    candidates = getattr(response, "candidates", None) or []
-    parts: List[str] = []
-    for candidate in candidates:
-        content = getattr(candidate, "content", None)
-        if not content:
-            continue
-        for part in getattr(content, "parts", []) or []:
-            part_text = getattr(part, "text", None)
-            if isinstance(part_text, str) and part_text.strip():
-                parts.append(part_text)
-    if parts:
-        return "\n".join(parts)
-
-    raise ValueError("Gemini response contained no text payload")
+    if not raw_text:
+        raise ValueError("Gemini response contained no text payload")
+    
+    # NEW: Robust cleaning for Gemini 3 (removes ```json ... ``` blocks)
+    clean_text = raw_text.strip()
+    if clean_text.startswith("```"):
+        # Find the first { and last }
+        start = clean_text.find("{")
+        end = clean_text.rfind("}")
+        if start != -1 and end != -1:
+            clean_text = clean_text[start : end + 1]
+    
+    return clean_text
 
 
 def _safe_parse_response(payload: str, goal: str, language: Language) -> Dict[str, Any]:
